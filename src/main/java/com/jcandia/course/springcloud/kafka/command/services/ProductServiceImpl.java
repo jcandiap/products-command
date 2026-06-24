@@ -1,0 +1,26 @@
+package com.jcandia.course.springcloud.kafka.command.services;
+
+import com.jcandia.course.springcloud.kafka.command.entities.Product;
+import com.jcandia.course.springcloud.kafka.command.models.dto.ProductDTO;
+import com.jcandia.course.springcloud.kafka.command.models.mapper.Mappers;
+import com.jcandia.course.springcloud.kafka.command.repositories.ProductRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class ProductServiceImpl implements ProductService {
+
+    private final ProductRepository productRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    @Override
+    @Transactional
+    public ProductDTO create(ProductDTO productDTO) {
+        Product productNew = productRepository.save(Mappers.toEntity(productDTO));
+        return Mappers.toDTO(productNew);
+    }
+
+}
