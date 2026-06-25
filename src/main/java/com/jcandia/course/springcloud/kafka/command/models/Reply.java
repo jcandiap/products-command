@@ -1,7 +1,7 @@
 package com.jcandia.course.springcloud.kafka.command.models;
 
 public record Reply<T>(
-        String status,
+        ReplyStatus status,
         String message,
         T body) {
 }
