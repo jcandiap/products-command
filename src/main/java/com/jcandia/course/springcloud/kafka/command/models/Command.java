@@ -1,7 +1,7 @@
 package com.jcandia.course.springcloud.kafka.command.models;
 
 public record Command<T>(
-        String type,
+        CommandType type,
         Long id,
         T body
 ) {
