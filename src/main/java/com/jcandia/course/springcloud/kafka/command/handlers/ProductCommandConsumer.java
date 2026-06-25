@@ -42,6 +42,20 @@ public class ProductCommandConsumer {
                     log.info("Creating product: name={}, price={}", savedProduct.name(), savedProduct.price());
                     reply = new Reply<>("SUCCESS", "Product created", savedProduct);
                 }
+                case "FIND" -> {
+                    if( cmd.id() == null ) {
+                        log.warn("Read empty ID");
+                        reply = new Reply<>("ERROR", "ID is required", null);
+                    }
+
+                    ProductDTO productDTO = service.findById(cmd.id());
+
+                    reply = (productDTO == null) ?
+                        new Reply<>("ERROR", "Product not found", null) :
+                        new Reply<>("SUCCESS", "Read product name", productDTO);
+
+                    log.info("Finding product: id={}", cmd.id());
+                }
 //                case "UPDATE" -> {
 //                    log.info("Updating product: name={}, price={}", cmd.body().name(), cmd.body().price());
 //                }
@@ -50,9 +64,6 @@ public class ProductCommandConsumer {
 //                }
 //                case "FIND_ALL" -> {
 //                    log.info("Getting all products");
-//                }
-//                case "FIND" -> {
-//                    log.info("Finding product: id={}", cmd.body().id());
 //                }
                 default -> {
                     log.warn("Unknown command type={}", cmd.type());

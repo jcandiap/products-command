@@ -23,4 +23,10 @@ public class ProductServiceImpl implements ProductService {
         return Mappers.toDTO(productNew);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ProductDTO findById(Long id) {
+        return productRepository.findById(id).map(Mappers::toDTO).orElse(null);
+    }
+
 }
