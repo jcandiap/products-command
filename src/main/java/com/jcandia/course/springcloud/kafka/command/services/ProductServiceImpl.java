@@ -7,6 +7,8 @@ import com.jcandia.course.springcloud.kafka.command.repositories.ProductReposito
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -27,6 +29,14 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
         return productRepository.findById(id).map(Mappers::toDTO).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDTO> findAll() {
+        return ((List<Product>)productRepository.findAll()).stream()
+                .map(Mappers::toDTO)
+                .toList();
     }
 
 }

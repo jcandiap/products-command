@@ -30,7 +30,7 @@ public class ProductCommandConsumer {
         return msg -> {
             Command<ProductDTO> cmd = msg.getPayload();
             String type = cmd.type() == null ? "" : cmd.type().toUpperCase();
-            Reply<ProductDTO> reply;
+            Reply<?> reply;
             switch (type) {
                 case "CREATE" -> {
                     if( cmd.body() == null ) {
@@ -56,18 +56,19 @@ public class ProductCommandConsumer {
 
                     log.info("Finding product: id={}", cmd.id());
                 }
+                case "FIND_ALL" -> {
+                    reply = new Reply<>("SUCCESS", "Read all products", service.findAll());
+                    log.info("Getting all products");
+                }
 //                case "UPDATE" -> {
 //                    log.info("Updating product: name={}, price={}", cmd.body().name(), cmd.body().price());
 //                }
 //                case "DELETE" -> {
 //                    log.info("Deleting product: id={}", cmd.body().id());
 //                }
-//                case "FIND_ALL" -> {
-//                    log.info("Getting all products");
-//                }
                 default -> {
                     log.warn("Unknown command type={}", cmd.type());
-                    reply = new Reply<>("ERROR", "Unknown command type", null);
+                    reply = new Reply<>("ERROR", "Unknown command type", service.findAll());
                 }
             }
 
