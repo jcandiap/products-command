@@ -60,9 +60,23 @@ public class ProductCommandConsumer {
                     reply = new Reply<>("SUCCESS", "Read all products", service.findAll());
                     log.info("Getting all products");
                 }
-//                case "UPDATE" -> {
-//                    log.info("Updating product: name={}, price={}", cmd.body().name(), cmd.body().price());
-//                }
+                case "UPDATE" -> {
+                    if( cmd.body() == null || cmd.id() == null ) {
+                        log.warn("ID and body are required");
+                        reply = new Reply<>("ERROR", "ID and body are required", null);
+                    }
+
+                    ProductDTO productDTO = service.findById(cmd.id());
+
+                    if( productDTO != null ){
+                        reply = new Reply<>("SUCCESS", "Update product name", productDTO);
+                        log.info("Updating product: name={}, price={}", productDTO.name(), productDTO.price());
+                    } else {
+                        reply = new Reply<>("ERROR", "Product not found", null);
+                        log.warn("Product not found, null Product DTO");
+                    }
+
+                }
 //                case "DELETE" -> {
 //                    log.info("Deleting product: id={}", cmd.body().id());
 //                }

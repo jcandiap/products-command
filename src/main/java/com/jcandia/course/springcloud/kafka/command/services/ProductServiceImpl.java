@@ -39,4 +39,18 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
+    @Override
+    @Transactional
+    public ProductDTO update(Long id, ProductDTO productDTO) {
+        Product entity = productRepository.findById(id).orElse(null);
+        if( entity == null ) {
+            return null;
+        }
+
+        entity.setName(productDTO.name());
+        entity.setPrice(productDTO.price());
+
+        return Mappers.toDTO(productRepository.save(entity));
+    }
+
 }

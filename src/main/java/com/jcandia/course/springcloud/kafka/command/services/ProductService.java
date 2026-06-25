@@ -9,5 +9,6 @@ public interface ProductService {
     ProductDTO create(ProductDTO productDTO);
     ProductDTO findById(Long id);
     List<ProductDTO> findAll();
+    ProductDTO update(Long id, ProductDTO productDTO);
 
 }
