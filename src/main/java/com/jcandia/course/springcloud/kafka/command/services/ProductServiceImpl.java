@@ -53,4 +53,15 @@ public class ProductServiceImpl implements ProductService {
         return Mappers.toDTO(productRepository.save(entity));
     }
 
+    @Override
+    @Transactional
+    public boolean delete(Long id) {
+        boolean result = productRepository.existsById(id);
+        if( result ) {
+            productRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
 }

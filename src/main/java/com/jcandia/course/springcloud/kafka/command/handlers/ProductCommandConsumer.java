@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Configuration
@@ -77,9 +76,19 @@ public class ProductCommandConsumer {
                     }
 
                 }
-//                case "DELETE" -> {
-//                    log.info("Deleting product: id={}", cmd.body().id());
-//                }
+                case "DELETE" -> {
+                    if( cmd.id() == null ) {
+                        log.warn("ID is required");
+                        reply = new Reply<>("ERROR", "ID is required", null);
+                    }
+
+                    boolean result = service.delete(cmd.id());
+                    reply = (result) ?
+                            new Reply<>("SUCCESS", "Deleting product", "deleted") :
+                            new Reply<>("ERROR", "Product not found", null);
+
+                    log.info("Deleting product: id={}", cmd.body().id());
+                }
                 default -> {
                     log.warn("Unknown command type={}", cmd.type());
                     reply = new Reply<>("ERROR", "Unknown command type", service.findAll());
