@@ -74,7 +74,7 @@ public class ProductCommandConsumer {
                         log.warn("ID and body are required");
                         yield new Reply<>(ReplyStatus.ERROR, "ID and body are required", null);
                     } else {
-                        ProductDTO productDTO = service.findById(cmd.id());
+                        ProductDTO productDTO = service.update(cmd.id(), cmd.body());
 
                         if( productDTO != null ){
                             log.info("Updating product: name={}, price={}", productDTO.name(), productDTO.price());
